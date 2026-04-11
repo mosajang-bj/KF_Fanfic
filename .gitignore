@@ -1,0 +1,9 @@
+# 환경변수 (API 키 포함 — 절대 커밋하지 마세요)
+.env
+.env.local
+
+# Vercel
+.vercel/
+
+# macOS
+.DS_Store

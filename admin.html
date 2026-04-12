@@ -43,9 +43,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .fchip.fan.on{background:#805020;color:#fff}
 /* cal grid */
 .cal-grid-wrap{overflow-x:auto}
-.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:#22223a;border-radius:10px;overflow:hidden;min-width:560px}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);grid-auto-rows:90px;gap:1px;background:#22223a;border-radius:10px;overflow:hidden;min-width:560px}
 .cal-dow{background:#13131f;padding:8px 4px;text-align:center;font-size:11px;font-weight:700;color:#666;letter-spacing:.05em}
-.cal-cell{background:#1a1a28;min-height:90px;padding:6px 4px 4px;cursor:default;transition:background .1s;position:relative}
+.cal-cell{background:#1a1a28;height:90px;min-height:90px;max-height:90px;padding:6px 4px 4px;cursor:default;transition:background .1s;position:relative;overflow:hidden;box-sizing:border-box}
 .cal-cell.other{background:#14141f}
 .cal-cell.today{background:#1e1a30}
 .cal-cell:hover{background:#202030}
@@ -377,8 +377,8 @@ function renderCal() {
     else num.textContent = c.day;
     cell.appendChild(num);
 
-    const show = dayEvts.slice(0,3);
-    show.forEach(e => {
+    const MAX_PILLS = 2;
+    dayEvts.slice(0, MAX_PILLS).forEach(e => {
       const pill = document.createElement('div');
       pill.className = `cal-pill ${PC[e.source]||'src-manual'}`;
       pill.textContent = `${TYPE_EMOJI[e.type]||''} ${e.name}`;
@@ -386,11 +386,11 @@ function renderCal() {
       pill.onclick = () => openDetail(e);
       cell.appendChild(pill);
     });
-    if(dayEvts.length>3) {
+    if(dayEvts.length > MAX_PILLS) {
       const more = document.createElement('div');
       more.className='cal-more';
-      more.textContent=`+${dayEvts.length-3} more`;
-      more.onclick = () => openDetail(dayEvts[3]);
+      more.textContent=`+${dayEvts.length - MAX_PILLS} more`;
+      more.onclick = () => openDetail(dayEvts[MAX_PILLS]);
       cell.appendChild(more);
     }
     grid.appendChild(cell);

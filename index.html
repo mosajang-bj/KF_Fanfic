@@ -964,51 +964,17 @@ function parseGoodsRow(row) {
 let activeGoodsCat = 'all';
 
 
-// Redash 쿼리 설정 (그룹별)
-const REDASH_QUERIES = [
-  { group: 'bts',       queryId: 24366 },
-  { group: 'enhypen',   queryId: 24367 },
-  { group: 'seventeen', queryId: 24368 },
-];
-const REDASH_HOST = 'redash.bunjang.io';
-// ↓ Vercel 배포 시에는 환경변수로 주입되므로 여기서는 비워둠
-// ↓ 로컬 테스트 시 아래에 API 키 직접 입력 가능 (배포 전 반드시 제거)
-const REDASH_API_KEY_LOCAL = '';  // ← 로컬 테스트용, 배포 시 공백 유지
-
-async function fetchOneQuery(queryId, apiKey) {
-  const url = `https://${REDASH_HOST}/api/queries/${queryId}/results.json?api_key=${apiKey}`;
-  const res = await fetch(url, { signal: AbortSignal.timeout(20000) });
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  const json = await res.json();
-  if (json.job) throw new Error('쿼리 실행 중');
-  return (json?.query_result?.data?.rows || []).slice(0, 100);
-}
-
 async function fetchGoods() {
   try {
-    let data;
-
-    if (location.protocol !== 'file:') {
-      // Vercel 배포 환경: 서버리스 프록시 사용
-      const res = await fetch('/api/goods');
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      data = await res.json();
-    } else if (REDASH_API_KEY_LOCAL) {
-      // 로컬 file:// 환경: Redash 직접 호출
-      const results = await Promise.all(
-        REDASH_QUERIES.map(q => fetchOneQuery(q.queryId, REDASH_API_KEY_LOCAL))
-      );
-      data = {};
-      REDASH_QUERIES.forEach((q, i) => { data[q.group] = results[i]; });
-    } else {
-      return; // API 키 없으면 폴백 유지
-    }
+    const groups = ['bts', 'enhypen', 'seventeen'];
+    const results = await Promise.all(
+      groups.map(g => fetch(`/public/goods-${g}.json`).then(r => r.ok ? r.json() : []))
+    );
 
     let hasData = false;
-    ['bts', 'enhypen', 'seventeen'].forEach(gid => {
-      const rows = data[gid];
-      if (!Array.isArray(rows) || rows.length === 0) return;
-      GOODS[gid] = rows.map(parseGoodsRow);
+    groups.forEach((gid, i) => {
+      if (!Array.isArray(results[i]) || results[i].length === 0) return;
+      GOODS[gid] = results[i];
       hasData = true;
     });
 
@@ -1017,7 +983,7 @@ async function fetchGoods() {
       renderBottom();
     }
   } catch (err) {
-    console.warn('[KF_Calendar] Goods API 실패, 폴백 데이터 사용:', err.message);
+    console.warn('[KF_Calendar] Goods fetch 실패, 폴백 데이터 사용:', err.message);
   }
 }
 

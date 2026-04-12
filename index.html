@@ -546,7 +546,9 @@ body.theme-seventeen{
 // ─────────────────────────────────────────
 //  CONSTANTS
 // ─────────────────────────────────────────
-const TODAY = new Date(2026, 3, 11); // April 11 2026
+// KST(UTC+9) 기준 오늘 날짜
+const _kst = new Date(new Date().toLocaleString('en-US', {timeZone:'Asia/Seoul'}));
+const TODAY = new Date(_kst.getFullYear(), _kst.getMonth(), _kst.getDate());
 
 const GROUPS = [
   {id:'enhypen',   label:'ENHYPEN',    color:'#E8823A', theme:'theme-enhypen'},

@@ -19,6 +19,7 @@
     { "source": "/api/(.*)", "destination": "/api/$1" },
     { "source": "/goods/(.*)", "destination": "/goods/$1" },
     { "source": "/admin", "destination": "/admin.html" },
+    { "source": "/market", "destination": "/market.html" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }

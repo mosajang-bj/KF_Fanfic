@@ -1690,7 +1690,7 @@ function renderGoods(bot, evtsOnDay){
     const row = document.createElement('div');
     row.className='live-row';
     liveItems.slice(0,12).forEach(item=>{
-      const url=`https://bunjang.global/product/${item.id}`;
+      const url=`https://globalbunjang.com/product/${item.id}`;
       const imgSrc=item.imageUrl?(location.protocol==='file:'?item.imageUrl:`/api/image?url=${encodeURIComponent(item.imageUrl)}`):'';
       const a=document.createElement('a');
       a.className='live-card';

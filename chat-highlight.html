@@ -577,12 +577,14 @@ input:focus, textarea:focus { border-color: var(--accent) !important; }
   display: flex;
   align-items: center;
   justify-content: space-between;
+  position: relative;
   padding: 0 16px;
   height: 52px;
   border-bottom: 1px solid var(--border);
   flex-shrink: 0;
 }
 .studio-modal-title {
+  position: absolute; left: 50%; transform: translateX(-50%);
   font-size: 16px;
   font-weight: 700;
   color: var(--fg-neutral);
@@ -2533,9 +2535,19 @@ input:focus, textarea:focus { border-color: var(--accent) !important; }
 .tmpl-card {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 16px;
+  border-radius: 14px;
+  padding: 16px 16px 14px;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+/* 카드 왼쪽 컬러 액센트 바 */
+.tmpl-card::before {
+  content: '';
+  position: absolute; left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--tmpl-color, var(--border));
+  border-radius: 14px 0 0 14px;
 }
 .tmpl-card-clickable {
   cursor: pointer;
@@ -2543,6 +2555,7 @@ input:focus, textarea:focus { border-color: var(--accent) !important; }
 .tmpl-card-clickable:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(0,0,0,.08);
+  border-color: var(--tmpl-color, var(--border));
 }
 .tmpl-card-clickable:active {
   transform: scale(0.98);
@@ -2560,9 +2573,13 @@ input:focus, textarea:focus { border-color: var(--accent) !important; }
   gap: 8px;
 }
 .tmpl-emoji {
-  font-size: 22px;
+  font-size: 26px;
   line-height: 1;
   flex-shrink: 0;
+  width: 40px; height: 40px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--bg-neutral-weak);
+  border-radius: 10px;
 }
 .tmpl-name {
   font-size: 15px;
@@ -2572,13 +2589,17 @@ input:focus, textarea:focus { border-color: var(--accent) !important; }
   line-height: 120%;
 }
 .tmpl-arrow {
-  font-size: 16px;
-  color: var(--fg-neutral-subtle);
+  font-size: 14px;
+  color: var(--fg-neutral-placeholder);
   flex-shrink: 0;
   display: none;
+  width: 24px; height: 24px;
+  background: var(--bg-neutral-weak);
+  border-radius: 50%;
+  align-items: center; justify-content: center;
 }
 .tmpl-card-clickable .tmpl-arrow {
-  display: block;
+  display: flex;
 }
 
 /* 태그 (정보성, 비클릭) */
@@ -2590,13 +2611,13 @@ input:focus, textarea:focus { border-color: var(--accent) !important; }
 }
 .tmpl-tag {
   display: inline-block;
-  padding: 3px 8px;
+  padding: 3px 9px;
   background: var(--bg-neutral-weak);
   border-radius: 20px;
-  font-size: 12px;
-  font-weight: 400;
+  font-size: 11px;
+  font-weight: 500;
   letter-spacing: 0;
-  color: var(--fg-neutral-muted);
+  color: var(--fg-neutral-subtle);
   line-height: 140%;
 }
 
@@ -2675,15 +2696,15 @@ input:focus, textarea:focus { border-color: var(--accent) !important; }
 
       <!-- 홈 헤더 -->
       <div class="home-v2-header">
-        <h2 class="home-v2-title">내 팬픽의 설레는 순간,<br><span>채팅으로 뚝딱</span></h2>
-        <p class="home-v2-sub">가볍게 써보는 단편 AU부터,<br>연재 중인 팬픽의 하이라이트 장면을 채팅 클립으로 만들어 공유까지.</p>
+        <h2 class="home-v2-title">팬픽의 하이라이트,<br><span>채팅으로 만들고 공유해보세요</span></h2>
+        <p class="home-v2-sub">템플릿 선택 → 대화 작성 → SNS 공유까지<br>3분이면 완성돼요</p>
       </div>
 
       <!-- 템플릿 그리드 -->
       <div class="template-list">
 
         <!-- 아이돌물 — 서브옵션 있음 -->
-        <div class="tmpl-card tmpl-card-clickable" onclick="openTemplateSheet('아이돌물')">
+        <div class="tmpl-card tmpl-card-clickable" style="--tmpl-color:#D80C18;" onclick="openTemplateSheet('아이돌물')">
           <div class="tmpl-card-top">
             <div class="tmpl-card-left">
               <span class="tmpl-emoji">🎤</span>
@@ -2700,7 +2721,7 @@ input:focus, textarea:focus { border-color: var(--accent) !important; }
         </div>
 
         <!-- 키못방 — 태그형 -->
-        <div class="tmpl-card tmpl-card-clickable" onclick="openTemplateSheet('키못방')">
+        <div class="tmpl-card tmpl-card-clickable" style="--tmpl-color:#007AFF;" onclick="openTemplateSheet('키못방')">
           <div class="tmpl-card-top">
             <div class="tmpl-card-left">
               <span class="tmpl-emoji">🏠</span>
@@ -2717,7 +2738,7 @@ input:focus, textarea:focus { border-color: var(--accent) !important; }
         </div>
 
         <!-- 멧갈라 — 태그형 -->
-        <div class="tmpl-card tmpl-card-clickable" onclick="openTemplateSheet('멧갈라')">
+        <div class="tmpl-card tmpl-card-clickable" style="--tmpl-color:#9B59B6;" onclick="openTemplateSheet('멧갈라')">
           <div class="tmpl-card-top">
             <div class="tmpl-card-left">
               <span class="tmpl-emoji">👗</span>
@@ -2732,7 +2753,7 @@ input:focus, textarea:focus { border-color: var(--accent) !important; }
         </div>
 
         <!-- 코첼라 에프터파티 — 태그형 -->
-        <div class="tmpl-card tmpl-card-clickable" onclick="openTemplateSheet('코첼라 에프터파티')">
+        <div class="tmpl-card tmpl-card-clickable" style="--tmpl-color:#F39C12;" onclick="openTemplateSheet('코첼라 에프터파티')">
           <div class="tmpl-card-top">
             <div class="tmpl-card-left">
               <span class="tmpl-emoji">🎵</span>
@@ -2747,7 +2768,7 @@ input:focus, textarea:focus { border-color: var(--accent) !important; }
         </div>
 
         <!-- 제 n번째 멤버 — 서브옵션 있음 -->
-        <div class="tmpl-card tmpl-card-clickable" onclick="openTemplateSheet('제 n번째 멤버')">
+        <div class="tmpl-card tmpl-card-clickable" style="--tmpl-color:#00A587;" onclick="openTemplateSheet('제 n번째 멤버')">
           <div class="tmpl-card-top">
             <div class="tmpl-card-left">
               <span class="tmpl-emoji">👥</span>
@@ -2762,7 +2783,7 @@ input:focus, textarea:focus { border-color: var(--accent) !important; }
         </div>
 
         <!-- 20살 vs 28살 — 태그형 -->
-        <div class="tmpl-card tmpl-card-clickable" onclick="openTemplateSheet('20살 vs 28살')">
+        <div class="tmpl-card tmpl-card-clickable" style="--tmpl-color:#E74C3C;" onclick="openTemplateSheet('20살 vs 28살')">
           <div class="tmpl-card-top">
             <div class="tmpl-card-left">
               <span class="tmpl-emoji">🔀</span>
@@ -3790,7 +3811,7 @@ function s4_chat() {
         <div class="ai-prompt-row">
           <span class="ai-prompt-icon">✦</span>
           <input class="ai-prompt-input" id="ai-prompt-input"
-            placeholder="예: 정재현이 더 다정하게 말해줘 / 카페 배경으로 / 다음 대사 추천"
+            placeholder="예: 더 다정하게 말해줘 / 카페 배경으로 / 다음 대사 추천"
             maxlength="200"
             onkeydown="if(event.key==='Enter'&&!event.isComposing){event.preventDefault();submitAIPrompt();}">
           <button class="ai-prompt-btn" onclick="submitAIPrompt()">
@@ -4850,6 +4871,9 @@ async function finishStudio() {
   setTimeout(() => {
     hideLoading();
 
+    // 자동 저장
+    saveDraft();
+
     // 현재 이미지 state에 저장 (공유 모달에서 사용)
     state.lastGeneratedImage = thumbnailDataUrl;
 
@@ -4932,7 +4956,7 @@ function renderChats() {
       ? `<img src="${item.avatar}" alt="${item.name}">`
       : (item.name[0] || '?');
     return `
-    <div class="chat-item" onclick="${item.isCurrent ? "goPage('studio')" : `loadDraftById('${item.id}')`}">
+    <div class="chat-item" onclick="${item.isCurrent ? "openCurrentStudio()" : `loadDraftById('${item.id}')`}">
       <div class="chat-item-avatar">${avatarHtml}</div>
       <div class="chat-item-body">
         <div class="chat-item-top">
@@ -4944,6 +4968,14 @@ function renderChats() {
       ${item.count > 0 ? `<div class="chat-item-badge">${item.count}</div>` : ''}
     </div>`;
   }).join('');
+}
+
+function openCurrentStudio() {
+  state.currentStep = 0;
+  const modal = document.getElementById('studio-modal');
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  renderStep();
 }
 
 function loadDraftById(id) {
@@ -6270,7 +6302,6 @@ function submitWeekVote() {
       <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M15 5L5 15M5 5L15 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
     </button>
     <div class="studio-modal-title">새 클립 만들기</div>
-    <button class="studio-save-btn" onclick="saveDraftAndClose()">저장</button>
   </div>
   <div class="studio">
     <div class="step-content" id="step-content"></div>
